@@ -118,7 +118,9 @@ function startMain() {
 
 
 	var socket = io.connect(host);
-/*
+
+console.log("conencted to " + host);
+
 	// did we receive a sketch?
 	socket.on('sketchData', function (data) {
 		editor.setValue(data.codeText);	// insert code into ace editor
@@ -132,7 +134,9 @@ function startMain() {
 	}	
 	else {
 		socket.emit('requestRandomSketch');
-	}*/
+	}
+
+	console.log("made it to the end");
 };
 
 function requestRandomSketch(){
