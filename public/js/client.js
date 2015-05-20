@@ -31,10 +31,15 @@ function selectSketch(_id) {
 };
 
 var saveSketchToServer = function(codeText, imageText){
-	var socket = io.connect(host);
+	console.log("attempt to save 111!");
+	//var socket = io.connect(host);
+	var socket = io.connect('http://localhost:5000');
+	console.log("attempt to save 222!");
 	socket.emit('saveSketch', { 
 		codeText: codeText, 
 		thumb: imageText });
+	console.log("attempt to save 333!");
+	
 };
 
 // there is almost definitely a better way to instantiate a new p5 script then doing this...
@@ -77,7 +82,9 @@ function saveCanvas2() {
 	  	resized.height = 240 * image.height / image.width;
 	  	canvasResize(canvas, resized, function(){
 	        var thumbnail = resized.toDataURL("image/jpeg", 0.75);
+	        console.log("attempt to save!");
 	        saveSketchToServer(lastPlayedCodeText, thumbnail);
+	        console.log("attempt to save DONE!");
 	     });		
 	};
 };
@@ -119,7 +126,7 @@ function startMain() {
 
 	var socket = io.connect(host);
 
-console.log("conencted to " + host);
+	console.log("conencted to " + host);
 
 	// did we receive a sketch?
 	socket.on('sketchData', function (data) {
@@ -156,8 +163,7 @@ function startBrowse() {
 	});
 };
 
-host = location.origin;
-//'http://localhost:5000';
+host = location.origin;	//'http://localhost:5000';
 
 window.onload = function() {
 	showEditor();

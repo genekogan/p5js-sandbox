@@ -10,12 +10,13 @@ var mongodb = require('mongodb');
 var uri = 'mongodb://heroku_app37049842:dolsgo69sgqu0kupj60kklues5@ds053310.mongolab.com:53310/heroku_app37049842';
 
 var saveSketch = function(codeText, thumbnail) {
+	console.log("SAVE THIS SKETCH!");
  	mongodb.MongoClient.connect(uri, function(err, db) {
   	if(err) throw err;
   	var sketchData = {codeText: codeText, thumbnail: thumbnail};
     db.collection('sketches').insert(sketchData, function(err, result) {
   		if(err) throw err;
-      console.log("Saved sketch to sketches collection");
+      	console.log("Saved sketch to sketches collection");
   	});
   });
 };
@@ -58,8 +59,9 @@ var sendSketchesData = function(socket){
 };  
 
 
-app.set('port', (process.env.PORT || 5000));
+//app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
+server.listen(process.env.PORT || 5000);
 
 app.get('/', function(request, response) {
   response.sendFile(__dirname + '/public/index.html');
@@ -68,14 +70,15 @@ app.get('/', function(request, response) {
 app.get('/browse', function(request, response) {
   response.sendFile(__dirname + '/public/browse.html');
 });
-
+/*
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
-
+*/
 
 io.on('connection', function (socket) {
   	socket.on('saveSketch', function (data) {
+  		console.log("request to save sketch");
     	saveSketch(data.codeText, data.thumb);
   	});
   	socket.on('browseSketches', function (data) {
