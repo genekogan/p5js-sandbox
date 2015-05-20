@@ -116,8 +116,9 @@ function startMain() {
 	editor.getSession().setMode("ace/mode/javascript");
 	activeSketch = new p5('', myP5);
 
-	var socket = io.connect(host);
 
+	var socket = io.connect(host);
+/*
 	// did we receive a sketch?
 	socket.on('sketchData', function (data) {
 		editor.setValue(data.codeText);	// insert code into ace editor
@@ -131,7 +132,7 @@ function startMain() {
 	}	
 	else {
 		socket.emit('requestRandomSketch');
-	}
+	}*/
 };
 
 function requestRandomSketch(){
