@@ -72,3 +72,22 @@ app.get('/browse', function(request, response) {
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
+
+
+io.on('connection', function (socket) {
+  	socket.on('saveSketch', function (data) {
+    	saveSketch(data.codeText, data.thumb);
+  	});
+  	socket.on('browseSketches', function (data) {
+  		sendSketchesData(socket);
+  	});
+  	socket.on('requestSketch', function (data) {
+    	sendSketchToClient(socket, data._id);
+  	});
+    socket.on('requestRandomSketch', function () {
+      	sendRandomSketchToClient(socket);
+    });
+});
+
+
+console.log("hello this is a test");
