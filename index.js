@@ -77,8 +77,6 @@ io.on('connection', function (socket) {
     	sendSketchToClient(socket, data._id);
   	});
     socket.on('requestRandomSketch', function () {
-      console.log("req random sketch");
-
       sendRandomSketchToClient(socket);
     });
 });
