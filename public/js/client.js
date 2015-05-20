@@ -2,12 +2,15 @@ var p5functions = ['preload','setup','draw','keyPressed','keyReleased','keyTyped
 var p5constants = ['HALF_PI','PI','QUARTER_PI','TAU','TWO_PI','frameCount','focused','displayWidth','displayHeight','windowWidth','windowHeight','windowResized','width','height','deviceOrientation','accelerationX','accelerationY','accelerationZ','pAccelerationX','pAccelerationY','pAccelerationZ','keyIsPressed','key','keyCode','mouseX','mouseY','pmouseX','pmouseY','winMouseX','winMouseY','pwinMouseX','pwinMouseY','mouseButton','mouseIsPressed','pixels[]','touchX','touchY','ptouchX','ptouchY','touches[]','touchIsDown','RGB','HSB','CLOSE'];
 var p5methods = ['alpha','blue','brightness','color','green','hue','lerpColor','red','saturation','background','clear','colorMode','fill','noFill','noStroke','stroke','remove','noLoop','loop','push','pop','redraw','append','arrayCopy','concat','reverse','shorten','shuffle','sort','splice','subset','float','int','join','match','matchAll','nf','nfc','nfp','nfs','split','splitTokens','trim','save','cursor','frameRate','noCursor','fullscreen','devicePixelScaling','getURL','getURLPath','getURLParams','createImage','loadImage','image','tint','noTint','imageMode','blend','copy','filter','get','loadPixels','set','updatePixels','setMoveThreshold','onDeviceMove','onDeviceTurn','loadJSON','loadStrings','loadTable','loadXML','httpGet','httpPost','httpDo','keyIsDown','mouseWheel','day','hour','minute','millis','month','second','year','createVector','abs','ceil','constrain','dist','exp','floor','lerp','log','mag','map','max','min','norm','pow','sq','sqrt','noise','noiseDetail','noiseSeed','randomSeed','random','randomGaussian','acos','asin','atan','atan2','cos','sin','tan','degrees','radians','angleMode','print','createCanvas','resizeCanvas','noCanvas','createGraphics','blendMode','arc','ellipse','line','point','quad','rect','triangle','ellipseMode','noSmooth','rectMode','smooth','strokeCap','strokeJoin','strokeWeight','bezier','bezierPoint','bezierTangent','curve','curveTightness','curvePoint','curveTangent','beginContour','beginShape','bezierVertex','curveVertex','endContour','endShape','quadraticVertex','vertex','applyMatrix','resetMatrix','rotate','scale','shearX','shearY','translate','textAlign','textLeading','textSize','textStyle','textWidth','text','textFont'];
 
+var host;
+
 var editor;
 var lastPlayedCodeText;
 var activeSketch;
 
+
 function browseSketches() {
-	var socket = io.connect('http://localhost:5000');
+	var socket = io.connect(host);
 	socket.emit('browseSketches', {});
 };
 
@@ -28,7 +31,7 @@ function selectSketch(_id) {
 };
 
 var saveSketchToServer = function(codeText, imageText){
-	var socket = io.connect('http://localhost:5000');
+	var socket = io.connect(host);
 	socket.emit('saveSketch', { 
 		codeText: codeText, 
 		thumb: imageText });
@@ -113,7 +116,7 @@ function startMain() {
 	editor.getSession().setMode("ace/mode/javascript");
 	activeSketch = new p5('', myP5);
 
-	var socket = io.connect('http://localhost:5000');
+	var socket = io.connect(host);
 
 	// did we receive a sketch?
 	socket.on('sketchData', function (data) {
@@ -132,13 +135,13 @@ function startMain() {
 };
 
 function requestRandomSketch(){
-	var socket = io.connect('http://localhost:5000');
+	var socket = io.connect(host);
 	socket.emit('requestRandomSketch');
 };
 
 function startBrowse() {
 	var idx = 0;
-	var socket = io.connect('http://localhost:5000');
+	var socket = io.connect(host);
 	socket.on('sketchesData', function (data) {
 		var image = new Image();
 		image.src = data.thumbnail;
@@ -147,6 +150,9 @@ function startBrowse() {
 		idx++;
 	});
 };
+
+host = location.origin;
+//'http://localhost:5000';
 
 window.onload = function() {
 	showEditor();
