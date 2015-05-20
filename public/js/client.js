@@ -33,7 +33,9 @@ function selectSketch(_id) {
 var saveSketchToServer = function(codeText, imageText){
 	console.log("attempt to save 111!");
 	//var socket = io.connect(host);
-	var socket = io.connect('http://localhost:5000');
+	//var socket = io.connect('http://localhost:5000');
+	var socket = io.connect('https://shielded-atoll-4446.herokuapp.com');
+
 	console.log("attempt to save 222!");
 	socket.emit('saveSketch', { 
 		codeText: codeText, 
