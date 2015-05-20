@@ -1,36 +1,42 @@
-# node-js-getting-started
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
+First install the required node modules:
 
-This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
+	npm install
+	
+Or you can do it manually...
 
-## Running Locally
+	npm install express
+	npm install socket.io
+	npm install mongodb
 
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https://toolbelt.heroku.com/) installed.
 
-```sh
-$ git clone git@github.com:heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
-$ npm install
-$ npm start
-```
+You then have to setup a [mongodb](https://www.mongodb.com/) database. Easiest way to do this is to deploy the app to [heroku](https://www.heroku.com/) and create a free instance of [mongolab for node.js](https://mongolab.com).
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
+	heroku create
+	heroku addons:create mongolab
 
-## Deploying to Heroku
+Then run the following command to the get the URI of your new mongodb instance.
 
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
+	heroku config | grep MONGOLAB_URI
+	
+	// you should see something like this:
+	->MONGOLAB_URI => mongodb://heroku_app1234:random_password@ds029017.mongolab.com:29017/heroku_app1234
 
-## Documentation
+Copy the address given to you in the previous step, then go to the file index.js, and replace the following line with the address above.
 
-For more information about using Node.js on Heroku, see these Dev Center articles:
+	var uri = 'mongodb:....'
 
-- [Getting Started with Node.js on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs)
-- [Heroku Node.js Support](https://devcenter.heroku.com/articles/nodejs-support)
-- [Node.js on Heroku](https://devcenter.heroku.com/categories/nodejs)
-- [Best Practices for Node.js Development](https://devcenter.heroku.com/articles/node-best-practices)
-- [Using WebSockets on Heroku with Node.js](https://devcenter.heroku.com/articles/node-websockets)
+Then push all the changes to heroku
+
+	git add *
+	git commit -m "initial commit"
+	git push heroku master
+
+Then deploy and run!
+
+	heroku ps:scale web=1
+	heroku open
+	
+You can also 
+
+
