@@ -4,7 +4,8 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var mongodb = require('mongodb');
 
-var uri = 'mongodb://heroku_app36983837:ile2eb8oc4c68adg9c8lsh4ug6@ds037252.mongolab.com:37252/heroku_app36983837';
+//var uri = 'mongodb://heroku_app36983837:ile2eb8oc4c68adg9c8lsh4ug6@ds037252.mongolab.com:37252/heroku_app36983837';
+var uri = 'mongodb://heroku_app37049842:dolsgo69sgqu0kupj60kklues5@ds053310.mongolab.com:53310/heroku_app37049842';
 
 var saveSketch = function(codeText, thumbnail) {
  	mongodb.MongoClient.connect(uri, function(err, db) {
@@ -34,8 +35,10 @@ var sendRandomSketchToClient = function(socket){
     if(err) throw err;
     db.collection('sketches').find().toArray(function (err, docs) {
       if(err) throw err;
-      var idxRandom = Math.floor(docs.length * Math.random(1));
-      socket.emit('sketchData', { _id:docs[idxRandom]._id, codeText:docs[idxRandom]['codeText'], thumbnail:docs[idxRandom]['thumbnail'] });
+	  if (docs.length > 0) {
+      	var idxRandom = Math.floor(docs.length * Math.random(1));
+      	socket.emit('sketchData', { _id:docs[idxRandom]._id, codeText:docs[idxRandom]['codeText'], thumbnail:docs[idxRandom]['thumbnail'] });
+}
     });
   });
 };  
