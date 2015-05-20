@@ -31,13 +31,11 @@ function selectSketch(_id) {
 };
 
 var saveSketchToServer = function(codeText, imageText){
-	console.log("attempt to save 111!");
-	//var socket = io.connect(host);
-	//var socket = io.connect('http://localhost:5000');
 	var socket = io.connect(host);
 	socket.emit('saveSketch', { 
 		codeText: codeText, 
 		thumb: imageText });
+	console.log("sent sketch to server!");
 };
 
 // there is almost definitely a better way to instantiate a new p5 script then doing this...
@@ -80,9 +78,7 @@ function saveCanvas2() {
 	  	resized.height = 240 * image.height / image.width;
 	  	canvasResize(canvas, resized, function(){
 	        var thumbnail = resized.toDataURL("image/jpeg", 0.75);
-	        console.log("attempt to save!");
 	        saveSketchToServer(lastPlayedCodeText, thumbnail);
-	        console.log("attempt to save DONE!");
 	     });		
 	};
 };
@@ -121,15 +117,15 @@ function startMain() {
 	editor.getSession().setMode("ace/mode/javascript");
 	activeSketch = new p5('', myP5);
 
-
 	var socket = io.connect(host);
-
-	console.log("conencted to " + host);
 
 	// did we receive a sketch?
 	socket.on('sketchData', function (data) {
 		editor.setValue(data.codeText);	// insert code into ace editor
 		playCode(data.codeText);
+	});
+	socket.on('setupDefaultSketch', function () {
+		editorWriteDefaultCode();
 	});
 
 	// is a specific sketch requested?
@@ -140,8 +136,6 @@ function startMain() {
 	else {
 		socket.emit('requestRandomSketch');
 	}
-
-	console.log("made it to the end");
 };
 
 function requestRandomSketch(){
@@ -161,7 +155,7 @@ function startBrowse() {
 	});
 };
 
-host = location.origin;	//'http://localhost:5000';
+host = location.origin;	
 
 window.onload = function() {
 	showEditor();
