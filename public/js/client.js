@@ -34,14 +34,10 @@ var saveSketchToServer = function(codeText, imageText){
 	console.log("attempt to save 111!");
 	//var socket = io.connect(host);
 	//var socket = io.connect('http://localhost:5000');
-	var socket = io.connect('https://shielded-atoll-4446.herokuapp.com');
-
-	console.log("attempt to save 222!");
+	var socket = io.connect(host);
 	socket.emit('saveSketch', { 
 		codeText: codeText, 
 		thumb: imageText });
-	console.log("attempt to save 333!");
-	
 };
 
 // there is almost definitely a better way to instantiate a new p5 script then doing this...

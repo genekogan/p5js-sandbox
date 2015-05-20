@@ -5,8 +5,6 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var mongodb = require('mongodb');
 
-
-//var uri = 'mongodb://heroku_app36983837:ile2eb8oc4c68adg9c8lsh4ug6@ds037252.mongolab.com:37252/heroku_app36983837';
 var uri = 'mongodb://heroku_app37049842:dolsgo69sgqu0kupj60kklues5@ds053310.mongolab.com:53310/heroku_app37049842';
 
 var saveSketch = function(codeText, thumbnail) {
@@ -58,7 +56,6 @@ var sendSketchesData = function(socket){
   });
 };  
 
-
 //app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 server.listen(process.env.PORT || 5000);
@@ -70,16 +67,10 @@ app.get('/', function(request, response) {
 app.get('/browse', function(request, response) {
   response.sendFile(__dirname + '/public/browse.html');
 });
-/*
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
-});
-*/
 
 io.on('connection', function (socket) {
   	socket.on('saveSketch', function (data) {
-  		console.log("request to save sketch");
-    	saveSketch(data.codeText, data.thumb);
+  		saveSketch(data.codeText, data.thumb);
   	});
   	socket.on('browseSketches', function (data) {
   		sendSketchesData(socket);
@@ -92,5 +83,4 @@ io.on('connection', function (socket) {
     });
 });
 
-
-console.log("hello this is a test");
+console.log("node running on port "+(process.env.PORT || 5000));
