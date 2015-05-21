@@ -1,16 +1,20 @@
+Sandbox for creating [p5.js](p5js.org) sketches. Create sketches, save / load / edit / browse contributed sketches from others. [App is running live here](https://shielded-atoll-4446.herokuapp.com/).
 
-First install the required node modules:
+## Install
+
+First install the required node modules from the package.json file by running:
 
 	npm install
 	
-Or you can do it manually...
+Or you can do each module manually...
 
 	npm install express
 	npm install socket.io
 	npm install mongodb
 
+You then have to setup a [mongodb](https://www.mongodb.com/) database. Easiest way to do this is to use [mongolab for node.js](https://mongolab.com) which creates a database on Amazon EC2 for you. The following instructions are for doing that, or you can setup mongodb on your own machine and run it locally only. 
 
-You then have to setup a [mongodb](https://www.mongodb.com/) database. Easiest way to do this is to deploy the app to [heroku](https://www.heroku.com/) and create a free instance of [mongolab for node.js](https://mongolab.com).
+Deploy the app to [heroku](https://www.heroku.com/) and then add a mongolab db by running:
 
 	heroku create
 	heroku addons:create mongolab
@@ -22,11 +26,11 @@ Then run the following command to the get the URI of your new mongodb instance.
 	// you should see something like this:
 	->MONGOLAB_URI => mongodb://heroku_app1234:random_password@ds029017.mongolab.com:29017/heroku_app1234
 
-Copy the address given to you in the previous step, then go to the file index.js, and replace the following line with the address above.
+Copy the address given to you in the previous step, then go to the file `index.js`, and replace the following line with the address above.
 
 	var uri = 'mongodb:....'
 
-Then push all the changes to heroku
+Push all the changes to heroku
 
 	git add *
 	git commit -m "initial commit"
@@ -37,6 +41,17 @@ Then deploy and run!
 	heroku ps:scale web=1
 	heroku open
 	
-You can also 
+### Running locally
+
+The app can also be run locally.
+
+	node index.js
+	
+### Bugs/to-do
+
+ * [Instantiating a new instance of p5](https://github.com/processing/p5.js/wiki/Instantiation-Cases) requires doing a complicated  parsing of the original user's code. This is unreliable and there is probably a better way to do this.
+ * Related: if you try to play new code which has an error in it, it won't properly delete the last p5 instance and will just append any new one to the bottom. Page has to be reloaded to fix this.
+ * Saving takes too long (5-10 sec), mostly from generating the thumbnail, and doesn't finish if it's interrupted by user clicking another link
+
 
 
