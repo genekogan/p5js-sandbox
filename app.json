@@ -1,7 +1,7 @@
 {
-  "name": "Node.js Getting Started",
-  "description": "A barebones Node.js app using Express 4",
-  "repository": "https://github.com/heroku/node-js-getting-started",
-  "logo": "http://node-js-sample.herokuapp.com/node.svg",
-  "keywords": ["node", "express", "static"]
+  "name": "p5.js sandbox",
+  "description": "A sandbox for creating and sharing p5.js sketches",
+  "repository": "https://github.com/genekogan/p5js_sandbox",
+  "logo": "http://p5js.org/img/p5js.svg",
+  "keywords": ["node", "express", "static", "processing", "p5.js"]
 }

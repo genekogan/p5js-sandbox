@@ -26,7 +26,7 @@ Then run the following command to the get the URI of your new mongodb instance.
 	// you should see something like this:
 	->MONGOLAB_URI => mongodb://heroku_app1234:random_password@ds029017.mongolab.com:29017/heroku_app1234
 
-Copy the address given to you in the previous step, then go to the file `index.js`, and replace the following line with the address above.
+Copy the address given to you in the previous step, then go to the file `server.js`, and replace the following line with the address above.
 
 	var uri = 'mongodb:....'
 
@@ -45,7 +45,7 @@ Then deploy and run!
 
 The app can also be run locally.
 
-	node index.js
+	node server.js
 	
 ### Bugs/to-do
 
