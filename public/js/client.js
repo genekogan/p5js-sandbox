@@ -36,6 +36,7 @@ var saveSketchToServer = function(codeText, imageText){
 		codeText: codeText, 
 		thumb: imageText });
 	console.log("sent sketch to server!");
+	toggleSaving(false);
 };
 
 // there is almost definitely a better way to instantiate a new p5 script then doing this...
@@ -60,11 +61,21 @@ function playCode(code) {
 	F();
 };
 
-var playEditor = function() {
+function playEditor() {
 	playCode(editor.getValue());
 };
 
+function toggleSaving(isSaving) {
+	if (isSaving) {
+		$('#savingNote').show();
+	}
+	else {
+		$('#savingNote').hide();
+	}
+};
+
 function saveCanvas2() {
+	toggleSaving(true);
 	var image = new Image();
 	image.id = "thumbnail";
 	image.src = document.getElementById("defaultCanvas").toDataURL('image/png', 0.8);
@@ -127,6 +138,9 @@ function startMain() {
 	socket.on('setupDefaultSketch', function () {
 		editorWriteDefaultCode();
 	});
+	socket.on('saveSketch', function () {
+		toggleSaving(false);
+	});
 
 	// is a specific sketch requested?
 	id = window.location.href.match(/\?id=([\w-]{24})/);
@@ -159,4 +173,5 @@ host = location.origin;
 
 window.onload = function() {
 	showEditor();
+	toggleSaving(false);
 };
