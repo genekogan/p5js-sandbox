@@ -1,5 +1,5 @@
 {
-  "name": "p5js sandbox",
+  "name": "p5js-sandbox",
   "version": "0.1.3",
   "description": "A sandbox for making p5.js sketches",
   "main": "server.js",
