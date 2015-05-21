@@ -1,4 +1,4 @@
-Sandbox for creating [p5.js](p5js.org) sketches. Create sketches, save / load / edit / browse contributed sketches from others. [App is running live here](https://shielded-atoll-4446.herokuapp.com/).
+Sandbox for creating [p5.js](p5js.org) sketches. Create sketches, save / load / edit / browse contributed sketches from others. [App is running live here](http://p5js-sandbox.herokuapp.com/).
 
 ## Install
 
