@@ -49,8 +49,7 @@ var playCode = function(code) {
   var s = function( p ) {
     if (runnable.indexOf('setup()') === -1 && runnable.indexOf('draw()') === -1){
       p.setup = function() {
-        p.createCanvas(100, 100);
-        p.background(200);
+        p.createCanvas(window.innerWidth, window.innerHeight);
         with (p) {
           eval(runnable);
         }
@@ -72,9 +71,9 @@ var playCode = function(code) {
       });
 
       if (typeof p.setup === 'undefined') {
+      	console.log('no setup');
         p.setup = function() {
-          p.createCanvas(100, 100);
-          p.background(200);
+          p.createCanvas(window.innerWidth, window.innerHeight);
         }
       }
     }
