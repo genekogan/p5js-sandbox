@@ -49,9 +49,9 @@ The app can also be run locally.
 	
 ### Bugs/to-do
 
- * [Instantiating a new instance of p5](https://github.com/processing/p5.js/wiki/Instantiation-Cases) requires doing a complicated  parsing of the original user's code. This is unreliable and there is probably a better way to do this.
- * Related: if you try to play new code which has an error in it, it won't properly delete the last p5 instance and will just append any new one to the bottom. Page has to be reloaded to fix this.
  * Saving takes too long (5-10 sec), mostly from generating the thumbnail, and doesn't finish if it's interrupted by user clicking another link
+ * Sketch versioning trees (possibly hosted as github gists)
+ * Users/collections/classrooms
 
 
 
