@@ -143,6 +143,7 @@ function startMain() {
 	socket.on('sketchData', function (data) {
 		console.log('sketch data');
 		editor.setValue(data.codeText);	// insert code into ace editor
+		playCode();
 	});
 	socket.on('setupDefaultSketch', function () {
 		editorWriteDefaultCode();
