@@ -82,6 +82,10 @@ app.get('/browse', function(request, response) {
 });
 
 io.on('connection', function (socket) {
+
+    // keep track of previous errors
+    var prevErr = '';
+
   	socket.on('saveSketch', function (data) {
   		saveSketch(data.codeText, data.thumb);
   	});
@@ -94,7 +98,27 @@ io.on('connection', function (socket) {
     socket.on('requestRandomSketch', function () {
       	sendRandomSketchToClient(socket);
     });
+
+    // when code is changed, log it
+    socket.on('editMade', function (data) {
+      socket.broadcast.emit('codechange', data);
+    });
+
+    // error handling
+    socket.on('err', function (data) {
+      // only do something with error if it is different from previous error.
+      // Otherwise, assume it is an error in draw loop.
+      if (data.msg === prevErr.msg && data.num === prevErr.num) {
+        // do nothing
+      } else {
+        socket.broadcast.emit('err', data);
+        prevErr = data;
+      }
+
+    });
+
 });
+
 
 console.log("node running on port "+(process.env.PORT || 5000));
 
