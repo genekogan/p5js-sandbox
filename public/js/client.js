@@ -1,4 +1,4 @@
-var host;
+var host = window.location.origin;
 
 var editor;
 var lastPlayedCodeText;
@@ -62,6 +62,10 @@ function initCode() {
 		userScript.text = code;
 		userScript.async = false;
 		$('#sketchFrame')[0].contentWindow.document.body.appendChild(userScript);
+
+		// TO DO: load these scripts and remove them from _sketch.html:
+		// <script language="javascript" type="text/javascript" src="js/socket.io-client/socket.io.js"></script>
+		// <script language="javascript" type="text/javascript" src="js/debug-console.js"></script>
 	};
 
 	playCode();
@@ -69,6 +73,7 @@ function initCode() {
 }
 
 var playCode = function() {
+	clearErrors();
 	$('#sketchFrame').attr('src', $('#sketchFrame').attr('src'));
 };
 
@@ -132,11 +137,29 @@ function editorWriteDefaultCode() {
 
 
 function startMain() {
+	var socket = io.connect(host);
+
 	editor = ace.edit("editor");
 	editor.setTheme("ace/theme/twilight");
-	editor.getSession().setMode("ace/mode/javascript");
 
-	var socket = io.connect(host);
+	var session = editor.getSession();
+	session.setMode("ace/mode/javascript");
+
+	session.on("change", function() {
+		// TO DO:
+		// - track all changes with timestamp
+		// - try to do live coding
+		// 
+
+		codeChanged(editor.getValue());
+		// socket.emit('editMade', {value: editor.getValue()});
+	});
+
+	// receive errors from debug-console.js via server.js
+	socket.on('err', function(data) {
+		logError(data);
+	});
+
 	initCode();
 
 	// did we receive a sketch?
@@ -162,6 +185,19 @@ function startMain() {
 	}
 };
 
+function logError(data) {
+	var dbg = document.getElementById('debug');
+	dbg.innerText = 'Error on line ' + data.num + ': ' + data.msg;
+
+	var dbgArea = document.getElementById('debugArea');
+	dbgArea.style.opacity = 1.0;
+}
+
+function clearErrors() {
+	var dbgArea = document.getElementById('debugArea');
+	dbgArea.style.opacity = 0.0;
+}
+
 function requestRandomSketch(){
 	var socket = io.connect(host);
 	socket.emit('requestRandomSketch');
@@ -178,8 +214,6 @@ function startBrowse() {
 		idx++;
 	});
 };
-
-host = location.origin;
 
 window.onload = function() {
 	showEditor();

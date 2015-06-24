@@ -5,53 +5,69 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>p5js Sandbox</title>
   <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script language="javascript" type="text/javascript" src="js/p5.js"></script>
+  <!-- <link rel="stylesheet" type="text/css" href="css/p5ide.css"> -->
+
+
+    <script language="javascript" type="text/javascript" src="js/codechange.js"></script>
+<!--     <script language="javascript" type="text/javascript" src="js/lib/underscore.js"></script>
+    <script language="javascript" type="text/javascript" src="js/lib/esprima.js"></script>
+    <script language="javascript" type="text/javascript" src="js/lib/escodegen.js"></script>
+ -->
     <script src="js/jquery-1.11.3.min.js"></script>
     <script src="js/limby-resize/canvas_resize.js"></script>
 </head>
 <body>
 
 
-<div id="main">
-  <div id="sketchPane">
-    <!-- sandbox="allow-same-origin allow-scripts allow-popups allow-forms" -->
-    <iframe id="sketchFrame"
-src="_sketch.html" width="100%" height="1000">
-    </iframe>
+  <div id="main">
+    <div id="sketchPane">
+      <!-- sandbox="allow-same-origin allow-scripts allow-popups allow-forms" -->
+      <iframe id="sketchFrame"
+  src="_sketch.html" width="100%" height="1000">
+      </iframe>
+    </div>
+
+    
+    <div id="editorPane">
+    <div id="editorControl">
+      <div id="editorControlNav">
+        <ul id="navlist">
+        <li><a id="showEditor" href="#" onclick="showEditor();">Show</a></li>
+        <li><a id="hideEditor" href="#" onclick="hideEditor();">Hide</a></li>
+        <li><a id="playEditor" href="#" onclick="playCode();">Play</a></li>
+        <li><a id="saveSketch" href="#" onclick="saveCanvas2();">Save</a></li>
+        <li><a id="browseSketches" href="/browse">Browse</a></li>
+        <li><a id="randomSketch" href="#" onclick="requestRandomSketch();">Random</a></li>
+        <li><a id="linkGithub" href="https://github.com/genekogan/p5js-sandbox">Source</a></li>
+        <li><a id="linkP5" href="http://www.p5js.org">p5.js</a></li>
+        <div id="savingNote">saving sketch! don't reload...</div>
+        </ul> 
+      </div>
+    </div>
+
+      <pre id="editor">
+    </pre>
+
+    </div>
+
   </div>
 
-  
-  <div id="editorPane">
-  <div id="editorControl">
-    <div id="editorControlNav">
-      <ul id="navlist">
-      <li><a id="showEditor" href="#" onclick="showEditor();">Show</a></li>
-      <li><a id="hideEditor" href="#" onclick="hideEditor();">Hide</a></li>
-      <li><a id="playEditor" href="#" onclick="playCode();">Play</a></li>
-      <li><a id="saveSketch" href="#" onclick="saveCanvas2();">Save</a></li>
-      <li><a id="browseSketches" href="/browse">Browse</a></li>
-      <li><a id="randomSketch" href="#" onclick="requestRandomSketch();">Random</a></li>
-      <li><a id="linkGithub" href="https://github.com/genekogan/p5js-sandbox">Source</a></li>
-      <li><a id="linkP5" href="http://www.p5js.org">p5.js</a></li>
-      <div id="savingNote">saving sketch! don't reload...</div>
-      </ul> 
+  <div id="debugArea" style="z-index:100; position:absolute; bottom:20px; left:10px; background:white;">
+    <!-- debug console -->
+    <div id="debug-drag" v-on="mousedown: startDrag"></div>
+    <!-- <div id="debug" style="font-size:{{$root.settings.fontSize}}px"></div> -->
+    <div id="debug" style="font-size:14px">    hello debug
+      <input id="console" type="text" width="100%"></input>
     </div>
   </div>
 
-    <pre id="editor">
-  </pre>
+  <script src="js/socket.io-client/socket.io.js"></script>
+  <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/client.js" type="text/javascript" charset="utf-8"></script>
+  <script>
+    startMain();
 
-  </div>
-
-</div>
-
-
-<script src="js/socket.io-client/socket.io.js"></script>
-<script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/client.js" type="text/javascript" charset="utf-8"></script>
-<script>
-  startMain();
-</script>
+  </script>
 
 </body>
 </html>
