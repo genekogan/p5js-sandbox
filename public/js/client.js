@@ -91,7 +91,10 @@ function saveCanvas2() {
 	toggleSaving(true);
 	var image = new Image();
 	image.id = "thumbnail";
-	image.src = document.getElementById("defaultCanvas").toDataURL('image/png', 0.8);
+	var sketchFrame = document.getElementById('sketchFrame');
+	var cnv = sketchFrame.contentDocument.getElementById('defaultCanvas');
+	image.src = cnv.toDataURL('image/png', 0.8);
+
     image.onload = function () {
 		var canvas = document.createElement('canvas');
 			canvas.width = image.width;
@@ -149,10 +152,10 @@ function startMain() {
 		// TO DO:
 		// - track all changes with timestamp
 		// - try to do live coding
-		// 
 
+		// codeChanged() via codechange.js could eventually handle live coding.
+		// For now, it just returns null.
 		codeChanged(editor.getValue());
-		// socket.emit('editMade', {value: editor.getValue()});
 	});
 
 	// receive errors from debug-console.js via server.js
@@ -185,19 +188,6 @@ function startMain() {
 	}
 };
 
-function logError(data) {
-	var dbg = document.getElementById('debug');
-	dbg.innerText = 'Error on line ' + data.num + ': ' + data.msg;
-
-	var dbgArea = document.getElementById('debugArea');
-	dbgArea.style.opacity = 1.0;
-}
-
-function clearErrors() {
-	var dbgArea = document.getElementById('debugArea');
-	dbgArea.style.opacity = 0.0;
-}
-
 function requestRandomSketch(){
 	var socket = io.connect(host);
 	socket.emit('requestRandomSketch');
@@ -219,3 +209,20 @@ window.onload = function() {
 	showEditor();
 	toggleSaving(false);
 };
+
+
+// *****
+// debug
+// *****
+function logError(data) {
+	var dbg = document.getElementById('debug');
+	dbg.innerText = 'Error on line ' + data.num + ': ' + data.msg;
+
+	var dbgArea = document.getElementById('debugArea');
+	dbgArea.style.opacity = 1.0;
+}
+
+function clearErrors() {
+	var dbgArea = document.getElementById('debugArea');
+	dbgArea.style.opacity = 0.0;
+}
