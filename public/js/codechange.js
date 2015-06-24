@@ -1,3 +1,9 @@
+/**
+ *  This module is used for live coding,
+ *  by Sepand Ansari from the p5.js-editor (desktop version).
+ *  Not active yet.
+ */
+
 var liveCodingEnabled = true;
 
 codeChanged = function(codeContent) {
