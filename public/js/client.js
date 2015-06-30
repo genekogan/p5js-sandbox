@@ -214,6 +214,19 @@ window.onload = function() {
 // *****
 // debug
 // *****
+
+// eventListener for messages from iframe:
+window.addEventListener('message', editorReceiveMsg, false);
+
+// eventHandler for postMessage from iframe:
+function editorReceiveMsg(e) {
+	var msg = JSON.parse(e.data);
+
+	if (msg.type === 'error') {
+		logError(msg);
+	}
+}
+
 function logError(data) {
 	var dbg = document.getElementById('debug');
 	dbg.innerText = 'Error on line ' + data.num + ': ' + data.msg;
