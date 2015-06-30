@@ -11,7 +11,7 @@
       }
 
       var data = {msg: msg, style: style, type: func };
-      parent.postMessage(JSON.stringify(data), 'http://localhost:5000');
+      parent.postMessage(JSON.stringify(data), window.location.origin);
       original[func].apply(original, arguments)
     };
   });
