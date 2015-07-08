@@ -1,8 +1,9 @@
 var host = window.location.origin;
 
-var editor;
+var aceEditor;
 var lastPlayedCodeText;
-var activeSketch;
+var sketchIsPlaying = false;
+var sketchFrame;
 
 var settings = {
 	"fullScreen" : true,
@@ -41,11 +42,11 @@ var saveSketchToServer = function(codeText, imageText){
 // adapted from p5js.org, originally by Lauren McCarthy
 // https://github.com/processing/p5.js-website/blob/master/js/render.js
 function initCode() {
-  var ed = editor;
+  sketchFrame = document.getElementById('sketchFrame');
 
   // tell exampleFrame to reset code every time it loads
-	document.getElementById('sketchFrame').onload = function() {
-		var code = ed.getValue();
+	sketchFrame.onload = function() {
+		var code = aceEditor.getValue();
 		code += '\n new p5();\n'
 
 		if (settings.fullScreen) {
@@ -57,14 +58,13 @@ function initCode() {
 							'}';
 		}
 
-		var userScript = $('#sketchFrame')[0].contentWindow.document.createElement('script');
+		var userScript = sketchFrame.contentWindow.document.createElement('script');
 		userScript.type = 'text/javascript';
 		userScript.text = code;
 		userScript.async = false;
-		$('#sketchFrame')[0].contentWindow.document.body.appendChild(userScript);
+		sketchFrame.contentWindow.document.body.appendChild(userScript);
 
 		// TO DO: load these scripts and remove them from _sketch.html:
-		// <script language="javascript" type="text/javascript" src="js/socket.io-client/socket.io.js"></script>
 		// <script language="javascript" type="text/javascript" src="js/debug-console.js"></script>
 	};
 
@@ -74,9 +74,33 @@ function initCode() {
 
 var playCode = function() {
 	clearErrors();
-	$('#sketchFrame').attr('src', $('#sketchFrame').attr('src'));
+
+	// sketchFrame.attr('src', $('#sketchFrame').attr('src'));
+	sketchFrame.src = sketchFrame.src;
+	sketchIsPlaying = true;
 };
 
+var stopCode = function() {
+	sketchIsPlaying = false;
+	var frameSrc = window.location.origin +'/'+ $('#sketchFrame').attr('src');
+	var data = {'msg':'stop'};
+	window.postMessage( JSON.stringify(data), frameSrc);
+};
+
+var pauseCode = function() {
+	sketchIsPlaying = false;
+	var frameSrc = window.location.origin +'/'+ $('#sketchFrame').attr('src');
+	var data = {'msg':'pause'};
+	window.postMessage( JSON.stringify(data), frameSrc);
+};
+
+var togglePlay = function() {
+	if (!sketchIsPlaying) {
+		playCode();
+	} else {
+		pauseCode();
+	}
+};
 
 function toggleSaving(isSaving) {
 	if (isSaving) {
@@ -135,17 +159,17 @@ function editorWriteDefaultCode() {
 		'\n'+
 		'function mousePressed() {\n'+
 		'};\n';
-	editor.setValue(defaultCode);
+	aceEditor.setValue(defaultCode);
 };
 
 
 function startMain() {
 	var socket = io.connect(host);
 
-	editor = ace.edit("editor");
-	editor.setTheme("ace/theme/twilight");
+	aceEditor = ace.edit("editor");
+	aceEditor.setTheme("ace/theme/twilight");
 
-	var session = editor.getSession();
+	var session = aceEditor.getSession();
 	session.setMode("ace/mode/javascript");
 
 	session.on("change", function() {
@@ -155,7 +179,7 @@ function startMain() {
 
 		// codeChanged() via codechange.js could eventually handle live coding.
 		// For now, it just returns null.
-		codeChanged(editor.getValue());
+		codeChanged(aceEditor.getValue());
 	});
 
 	// receive errors from debug-console.js via server.js
@@ -168,7 +192,7 @@ function startMain() {
 	// did we receive a sketch?
 	socket.on('sketchData', function (data) {
 		console.log('sketch data');
-		editor.setValue(data.codeText);	// insert code into ace editor
+		aceEditor.setValue(data.codeText);	// insert code into ace editor
 		playCode();
 	});
 	socket.on('setupDefaultSketch', function () {

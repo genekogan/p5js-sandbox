@@ -30,4 +30,21 @@
     return line;
   }
 
+  // message input
+  parent.addEventListener('message', outputReceiveMessage, false);
+
+  function outputReceiveMessage(e) {
+    var data = JSON.parse(e.data);
+    var msg = data.msg;
+
+    switch(msg) {
+      case 'pause':
+        window.noLoop();
+        break;
+      case 'stop':
+        window.remove();
+        break;
+    }
+  }
+
 })();
